@@ -243,39 +243,47 @@ void addGoods() {
     Goods g;
     g.id = nextGoodsId++;
 
-    WINDOW* win = newwin(20, 60, 2, 10);
+    WINDOW* win = newwin(22, 60, 2, 10);
     drawBorder(win);
     printTitle(win, "Add New Product", 60);
 
-    mvwprintw(win, 4, 2, "Product Name: ");
-    echo();
-    mvwgetnstr(win, 4, 16, g.name, MAX_NAME_LEN - 1);
+    // 显示已存在商品的id和名称
+    mvwprintw(win, 3, 2, "Existing Products:");
+    int showCount = goodsCount < 10 ? goodsCount : 10; // 最多显示10个
+    for (int i = 0; i < showCount; i++) {
+        mvwprintw(win, 4 + i, 4, "ID:%d  Name:%s", goodsList[i].id, goodsList[i].name);
+    }
 
-    mvwprintw(win, 5, 2, "Product Type: ");
-    mvwgetnstr(win, 5, 16, g.type, MAX_TYPE_LEN - 1);
+    int inputRow = 4 + showCount + 1;
+
+    mvwprintw(win, inputRow, 2, "Product Name: ");
+    echo();
+    mvwgetnstr(win, inputRow, 16, g.name, MAX_NAME_LEN - 1);
+
+    mvwprintw(win, inputRow + 1, 2, "Product Type: ");
+    mvwgetnstr(win, inputRow + 1, 16, g.type, MAX_TYPE_LEN - 1);
 
     char buffer[20];
-    mvwprintw(win, 6, 2, "Weight(kg): ");
-    mvwgetnstr(win, 6, 14, buffer, 19);
+    mvwprintw(win, inputRow + 2, 2, "Weight(kg): ");
+    mvwgetnstr(win, inputRow + 2, 14, buffer, 19);
     g.weight = atof(buffer);
 
-    mvwprintw(win, 7, 2, "Volume(m³): ");
-    mvwgetnstr(win, 7, 14, buffer, 19);
+    mvwprintw(win, inputRow + 3, 2, "Volume(m³): ");
+    mvwgetnstr(win, inputRow + 3, 14, buffer, 19);
     g.volume = atof(buffer);
 
-    mvwprintw(win, 8, 2, "Price($): ");
-    mvwgetnstr(win, 8, 14, buffer, 19);
+    mvwprintw(win, inputRow + 4, 2, "Price($): ");
+    mvwgetnstr(win, inputRow + 4, 14, buffer, 19);
     g.price = atof(buffer);
 
-    mvwprintw(win, 9, 2, "Quantity: ");
-    mvwgetnstr(win, 9, 14, buffer, 19);
+    mvwprintw(win, inputRow + 5, 2, "Quantity: ");
+    mvwgetnstr(win, inputRow + 5, 14, buffer, 19);
     g.quantity = atoi(buffer);
     noecho();
 
     goodsList[goodsCount++] = g;
-    saveGoods();
 
-    printCentered(win, 11, "Product added successfully! Press any key to return...", 60);
+    printCentered(win, inputRow + 7, "Product added successfully! Press any key to return...", 60);
     wrefresh(win);
     wgetch(win);
     delwin(win);
@@ -560,53 +568,53 @@ void createOrder() {
 
     // Add products to order
     mvwprintw(win, 9, 2, "Add products to order:");
-    mvwprintw(win, 10, 2, "Available Product IDs: ");
-
-    for (int i = 0; i < goodsCount && i < 10; i++) { // Display up to 10 products
-        char idStr[10];
-        sprintf(idStr, "%d ", goodsList[i].id);
-        wprintw(win, idStr);
+    mvwprintw(win, 10, 2, "Available Products:");
+    for (int i = 0; i < goodsCount && i < 10; i++) {
+        mvwprintw(win, 11 + i, 4, "ID:%d  Name:%s  Qty:%d", goodsList[i].id, goodsList[i].name, goodsList[i].quantity);
     }
+    int inputRow = 11 + (goodsCount < 10 ? goodsCount : 10) + 1;
 
     char buffer[20];
     int goodsIndex;
 
     while (1) {
-        mvwprintw(win, 12, 2, "Enter Product ID (0 to finish): ");
-        mvwgetnstr(win, 12, 33, buffer, 19);
+        mvwprintw(win, inputRow, 2, "Enter Product ID (0 to finish): ");
+        wclrtoeol(win);
+        mvwgetnstr(win, inputRow, 33, buffer, 19);
         int goodsId = atoi(buffer);
 
         if (goodsId == 0) break;
 
-        // Validate product ID
         goodsIndex = findGoodsById(goodsId);
         if (goodsIndex == -1) {
-            mvwprintw(win, 14, 2, "Invalid product ID!                ");
+            mvwprintw(win, inputRow + 1, 2, "Invalid product ID!                ");
             continue;
         }
 
-        mvwprintw(win, 13, 2, "Enter quantity: ");
-        mvwgetnstr(win, 13, 18, buffer, 19);
+        mvwprintw(win, inputRow + 1, 2, "Enter quantity: ");
+        wclrtoeol(win);
+        mvwgetnstr(win, inputRow + 1, 18, buffer, 19);
         int quantity = atoi(buffer);
 
         if (quantity <= 0 || quantity > goodsList[goodsIndex].quantity) {
-            mvwprintw(win, 14, 2, "Invalid quantity!                  ");
+            mvwprintw(win, inputRow + 2, 2, "Invalid quantity!                  ");
             continue;
         }
 
-        // Reduce inventory
         goodsList[goodsIndex].quantity -= quantity;
         o.items[o.itemCount].goodsId = goodsId;
         o.items[o.itemCount].quantity = quantity;
         o.itemCount++;
 
-        mvwprintw(win, 14, 2, "Product added to order!              ");
+        mvwprintw(win, inputRow + 2, 2, "Product added to order!              ");
 
         if (o.itemCount >= MAX_ITEMS) {
-            mvwprintw(win, 15, 2, "Maximum product limit reached!    ");
+            mvwprintw(win, inputRow + 3, 2, "Maximum product limit reached!    ");
             break;
         }
     }
+
+
     noecho();
 
     if (o.itemCount == 0) {

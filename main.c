@@ -84,6 +84,88 @@ Order ordersList[MAX_ORDERS];
 int ordersCount = 0;
 int nextOrderId = 1;
 
+// 文件保存与加载函数
+void saveGoods() {
+    FILE* fp = fopen("goods.dat", "wb");
+    if (fp) {
+        fwrite(&goodsCount, sizeof(int), 1, fp);
+        fwrite(goodsList, sizeof(Goods), goodsCount, fp);
+        fclose(fp);
+    }
+}
+void loadGoods() {
+    FILE* fp = fopen("goods.dat", "rb");
+    if (fp) {
+        fread(&goodsCount, sizeof(int), 1, fp);
+        fread(goodsList, sizeof(Goods), goodsCount, fp);
+        fclose(fp);
+        nextGoodsId = 1;
+        for (int i = 0; i < goodsCount; i++)
+            if (goodsList[i].id >= nextGoodsId)
+                nextGoodsId = goodsList[i].id + 1;
+    }
+}
+void saveVehicles() {
+    FILE* fp = fopen("vehicles.dat", "wb");
+    if (fp) {
+        fwrite(&vehiclesCount, sizeof(int), 1, fp);
+        fwrite(vehiclesList, sizeof(Vehicle), vehiclesCount, fp);
+        fclose(fp);
+    }
+}
+void loadVehicles() {
+    FILE* fp = fopen("vehicles.dat", "rb");
+    if (fp) {
+        fread(&vehiclesCount, sizeof(int), 1, fp);
+        fread(vehiclesList, sizeof(Vehicle), vehiclesCount, fp);
+        fclose(fp);
+        nextVehicleId = 1;
+        for (int i = 0; i < vehiclesCount; i++)
+            if (vehiclesList[i].id >= nextVehicleId)
+                nextVehicleId = vehiclesList[i].id + 1;
+    }
+}
+void saveWarehouses() {
+    FILE* fp = fopen("warehouses.dat", "wb");
+    if (fp) {
+        fwrite(&warehousesCount, sizeof(int), 1, fp);
+        fwrite(warehousesList, sizeof(Warehouse), warehousesCount, fp);
+        fclose(fp);
+    }
+}
+void loadWarehouses() {
+    FILE* fp = fopen("warehouses.dat", "rb");
+    if (fp) {
+        fread(&warehousesCount, sizeof(int), 1, fp);
+        fread(warehousesList, sizeof(Warehouse), warehousesCount, fp);
+        fclose(fp);
+        nextWarehouseId = 1;
+        for (int i = 0; i < warehousesCount; i++)
+            if (warehousesList[i].id >= nextWarehouseId)
+                nextWarehouseId = warehousesList[i].id + 1;
+    }
+}
+void saveOrders() {
+    FILE* fp = fopen("orders.dat", "wb");
+    if (fp) {
+        fwrite(&ordersCount, sizeof(int), 1, fp);
+        fwrite(ordersList, sizeof(Order), ordersCount, fp);
+        fclose(fp);
+    }
+}
+void loadOrders() {
+    FILE* fp = fopen("orders.dat", "rb");
+    if (fp) {
+        fread(&ordersCount, sizeof(int), 1, fp);
+        fread(ordersList, sizeof(Order), ordersCount, fp);
+        fclose(fp);
+        nextOrderId = 1;
+        for (int i = 0; i < ordersCount; i++)
+            if (ordersList[i].id >= nextOrderId)
+                nextOrderId = ordersList[i].id + 1;
+    }
+}
+
 // Utility functions
 void getCurrentDateTime(char* buffer) {
     time_t now = time(0);
@@ -191,6 +273,7 @@ void addGoods() {
     noecho();
 
     goodsList[goodsCount++] = g;
+    saveGoods();
 
     printCentered(win, 11, "Product added successfully! Press any key to return...", 60);
     wrefresh(win);
@@ -280,6 +363,7 @@ void addVehicle() {
     noecho();
 
     vehiclesList[vehiclesCount++] = v;
+    saveVehicles();
 
     printCentered(win, 10, "Vehicle added successfully! Press any key to return...", 60);
     wrefresh(win);
@@ -362,6 +446,7 @@ void addWarehouse() {
     noecho();
 
     warehousesList[warehousesCount++] = w;
+    saveWarehouses();
 
     printCentered(win, 8, "Warehouse added successfully! Press any key to return...", 60);
     wrefresh(win);
@@ -533,6 +618,8 @@ void createOrder() {
     }
 
     ordersList[ordersCount++] = o;
+    saveOrders(); // 自动保存
+    saveGoods();  // 商品库存也变了
 
     printCentered(win, 16, "Order created successfully! Press any key to return...", 60);
     wrefresh(win);
@@ -787,6 +874,8 @@ void processOrders() {
     strcpy(ordersList[orderIndex].status, "Shipping");
     ordersList[orderIndex].assignedVehicle = vehiclesList[vehicleIndex].id;
     vehiclesList[vehicleIndex].available = 0; // Set as unavailable
+    saveOrders();
+    saveVehicles();
 
     printCentered(win, 19, "Order has been updated to Shipping status! Press any key to return...", 70);
     wrefresh(win);
@@ -860,15 +949,16 @@ void completeOrders() {
     // Update order status
     strcpy(ordersList[orderIndex].status, "Completed");
     getCurrentDateTime(ordersList[orderIndex].deliveryTime);
-
-    // Release vehicle
+    // 释放车辆
     int vehicleId = ordersList[orderIndex].assignedVehicle;
     for (int i = 0; i < vehiclesCount; i++) {
         if (vehiclesList[i].id == vehicleId) {
-            vehiclesList[i].available = 1; // Set as available
+            vehiclesList[i].available = 1;
             break;
         }
     }
+    saveOrders();
+    saveVehicles();
 
     printCentered(win, 18, "Order has been completed! Press any key to return...", 70);
     wrefresh(win);
@@ -1124,7 +1214,16 @@ void showStartupScreen() {
 }
 
 int main() {
-    showStartupScreen();  // 添加这一行来显示启动界面
+    loadGoods();
+    loadVehicles();
+    loadWarehouses();
+    loadOrders();
+    showStartupScreen();
     showMainMenu();
+    // 退出前再次保存
+    saveGoods();
+    saveVehicles();
+    saveWarehouses();
+    saveOrders();
     return 0;
 }

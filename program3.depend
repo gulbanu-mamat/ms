@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1748742705 source:d:\≥Ã–Ú…Ëº∆\programs\program3\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+	<ctype.h>
+	<ncurses.h>
+

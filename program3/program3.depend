@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1748765384 source:d:\程序设计\programs\program3\main.c
+1748936862 source:d:\程序设计\programs\program3\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -8,7 +8,7 @@
 	<ncurses.h>
 	"library.h"
 
-1748765362 source:d:\程序设计\programs\program3\library.c
+1748937342 source:d:\程序设计\programs\program3\library.c
 	"library.h"
 	<stdio.h>
 	<stdlib.h>
@@ -23,14 +23,14 @@
 	<ctype.h>
 	<ncurses.h>
 
-1748764338 source:d:\程序设计\programs\program3\fileio.c
+1748937342 source:d:\程序设计\programs\program3\fileio.c
 	"fileio.h"
 	<stdio.h>
 
 1748763338 d:\程序设计\programs\program3\fileio.h
 	"library.h"
 
-1748764952 source:d:\程序设计\programs\program3\goods.c
+1748938364 source:d:\程序设计\programs\program3\goods.c
 	"goods.h"
 	"fileio.h"
 	"library.h"
@@ -42,7 +42,7 @@
 1748763338 d:\程序设计\programs\program3\goods.h
 	"library.h"
 
-1748764338 source:d:\程序设计\programs\program3\order.c
+1748937377 source:d:\程序设计\programs\program3\order.c
 	"order.h"
 	"goods.h"
 	"vehicle.h"
@@ -58,7 +58,7 @@
 1748763338 d:\程序设计\programs\program3\vehicle.h
 	"library.h"
 
-1748764338 source:d:\程序设计\programs\program3\vehicle.c
+1748938364 source:d:\程序设计\programs\program3\vehicle.c
 	"vehicle.h"
 	"fileio.h"
 	<ncurses.h>
@@ -66,7 +66,7 @@
 	<stdlib.h>
 	<string.h>
 
-1748764338 source:d:\程序设计\programs\program3\warehouse.c
+1748938496 source:d:\程序设计\programs\program3\warehouse.c
 	"warehouse.h"
 	"fileio.h"
 	<ncurses.h>
@@ -77,7 +77,7 @@
 1748763338 d:\程序设计\programs\program3\warehouse.h
 	"library.h"
 
-1748765820 source:d:\程序设计\programs\program3\ui.c
+1748938811 source:d:\程序设计\programs\program3\ui.c
 	"ui.h"
 	"library.h"
 	<ncurses.h>

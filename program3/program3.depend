@@ -15,7 +15,7 @@
 	<string.h>
 	<time.h>
 
-1748765362 d:\程序设计\programs\program3\library.h
+1749557867 d:\程序设计\programs\program3\library.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -77,12 +77,12 @@
 1748763338 d:\程序设计\programs\program3\warehouse.h
 	"library.h"
 
-1748938811 source:d:\程序设计\programs\program3\ui.c
+1749557604 source:d:\程序设计\programs\program3\ui.c
 	"ui.h"
 	"library.h"
 	<ncurses.h>
 	<string.h>
 
-1748765486 d:\程序设计\programs\program3\ui.h
+1749557366 d:\程序设计\programs\program3\ui.h
 	"library.h"
 

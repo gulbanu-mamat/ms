@@ -80,8 +80,8 @@ extern int ordersCount, nextOrderId;
 
 // 工具函数
 void getCurrentDateTime(char* buffer);
-void drawBorder();
-void printTitle();
+void drawBorder(); // 确保只有一个参数
+void printTitle(); // 确保只有两个参数
 void printCentered(WINDOW* win, int y, const char* msg, int width);
 void loadGoods();
 void loadVehicles();

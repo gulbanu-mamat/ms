@@ -3,49 +3,76 @@
 #include <ncurses.h>
 #include <string.h>
 
-// drawBorder¡¢printTitle¡¢printCentered¡¢navigateMenu¡¢showMainMenu¡¢showStartupScreenµÄÊµÏÖ
-
-// »æÖÆ´°¿Ú±ß¿ò
+// ç»˜åˆ¶çª—å£è¾¹æ¡†
 void drawBorder(WINDOW* win) {
-    box(win, 0, 0);  // Ê¹ÓÃncurses¿âµÄboxº¯Êı»æÖÆ´°¿Ú±ß¿ò
+    wborder(win, ACS_VLINE, ACS_VLINE, ACS_HLINE, ACS_HLINE,
+            ACS_ULCORNER, ACS_URCORNER, ACS_LLCORNER, ACS_LRCORNER);
 }
 
-// ÔÚ´°¿ÚÖĞ´òÓ¡±êÌâ
+// åœ¨çª—å£é¡¶éƒ¨æ‰“å°æ ‡é¢˜
 void printTitle(WINDOW* win, const char* title, int width) {
-    int titleLen = strlen(title);  // »ñÈ¡±êÌâµÄ³¤¶È
-    // ½«±êÌâ¾ÓÖĞ´òÓ¡ÔÚ´°¿ÚµÄµÚÒ»ĞĞ
+    int titleLen = strlen(title);
+    wattron(win, A_BOLD | COLOR_PAIR(5));
     mvwprintw(win, 1, (width - titleLen) / 2, "%s", title);
-    // ÔÚ±êÌâÏÂ·½»æÖÆÒ»ÌõË®Æ½Ïß
+    wattroff(win, A_BOLD | COLOR_PAIR(5));
+    wattron(win, COLOR_PAIR(6));
     mvwhline(win, 2, 1, ACS_HLINE, width - 2);
+    wattroff(win, COLOR_PAIR(6));
 }
 
-// ÔÚ´°¿ÚÖĞ¾ÓÖĞ´òÓ¡ÏûÏ¢
+// åœ¨çª—å£ä¸­å±…ä¸­æ‰“å°ä¿¡æ¯
 void printCentered(WINDOW* win, int y, const char* msg, int width) {
-    // ½«ÏûÏ¢¾ÓÖĞ´òÓ¡ÔÚÖ¸¶¨µÄĞĞ
+    wattron(win, COLOR_PAIR(3));
     mvwprintw(win, y, (width - strlen(msg)) / 2, "%s", msg);
+    wattroff(win, COLOR_PAIR(3));
 }
 
-// ÏÔÊ¾Ö÷²Ëµ¥
+// æ˜¾ç¤ºä¸»èœå•
 void showMainMenu() {
-    initscr();  // ³õÊ¼»¯ncurses¿â
-    start_color();  // ÆôÓÃÑÕÉ«Ä£Ê½
-    cbreak();  // ½ûÓÃĞĞ»º³å
-    noecho();  // ½ûÓÃ»ØÏÔ
-    keypad(stdscr, TRUE);  // ÆôÓÃ¹¦ÄÜ¼ü
-    curs_set(0);  // Òş²Ø¹â±ê
-    refresh();  // Ë¢ĞÂÆÁÄ»
+    initscr();
+    start_color();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    curs_set(0);
+    refresh();
 
-    // ¶¨ÒåÑÕÉ«¶Ô
-    init_pair(1, COLOR_BLACK, COLOR_WHITE); // Ñ¡ÖĞÏîµÄÑÕÉ«
-    init_pair(2, COLOR_WHITE, COLOR_BLUE);  // ±êÌâµÄÑÕÉ«
+    // åˆå§‹åŒ–é¢œè‰²å¯¹
+    init_pair(1, COLOR_BLACK, COLOR_WHITE);    // é€‰ä¸­é¡¹é¢œè‰²
+    init_pair(2, COLOR_WHITE, COLOR_BLUE);     // æ ‡é¢˜é¢œè‰²
+    init_pair(3, COLOR_CYAN, COLOR_BLACK);     // æ™®é€šæ–‡æœ¬é¢œè‰²
+    init_pair(4, COLOR_YELLOW, COLOR_BLACK);   // é«˜äº®æ–‡æœ¬é¢œè‰²
+    init_pair(5, COLOR_MAGENTA, COLOR_BLACK);  // æ ‡é¢˜é¢œè‰²
+    init_pair(6, COLOR_GREEN, COLOR_BLACK);    // åˆ†éš”çº¿é¢œè‰²
+    init_pair(7, COLOR_RED, COLOR_BLACK);      // è­¦å‘Šæ–‡æœ¬é¢œè‰²
+
+    // è®¡ç®—å·¦å³åˆ†åŒºå®½åº¦
+    int menu_width = COLS / 3;
+    int preview_width = COLS * 2 / 3;
+
+    WINDOW *menu_win = newwin(LINES, menu_width, 0, 0);
+    WINDOW *preview_win = newwin(LINES, preview_width, 0, menu_width);
+
+    keypad(menu_win, TRUE);
+    keypad(preview_win, TRUE);
+
+    // é¢„è§ˆæ–‡æœ¬å†…å®¹
+    const char *previews[] = {
+        "Manage products in the system:\n- Add new products\n- View existing products\n- Edit product details\n- Remove products",
+        "Manage transportation vehicles:\n- Add new vehicles\n- View vehicle list\n- Assign vehicles to routes\n- Track vehicle status",
+        "Manage storage facilities:\n- Add new warehouses\n- View warehouse inventory\n- Manage stock levels\n- Track storage capacity",
+        "Handle customer orders:\n- Create new orders\n- View order history\n- Process pending orders\n- Complete deliveries",
+        "Exit the system and save all data"
+    };
 
     int running = 1;
-    while (running) {
-        clear();  // Çå³ıÆÁÄ»
+    int highlight = 0;
 
-        attron(COLOR_PAIR(2));  // ÉèÖÃ±êÌâÑÕÉ«
-        mvprintw(1, 30, "LOGISTICS MANAGEMENT SYSTEM");  // ´òÓ¡ÏµÍ³±êÌâ
-        attroff(COLOR_PAIR(2));  // »Ö¸´Ä¬ÈÏÑÕÉ«
+    while (running) {
+        // ç»˜åˆ¶èœå•çª—å£
+        wclear(menu_win);
+        drawBorder(menu_win);
+        printTitle(menu_win, "MAIN MENU", menu_width);
 
         char* main_menu[] = {
             "1. Product Management",
@@ -55,182 +82,335 @@ void showMainMenu() {
             "5. Exit System"
         };
 
-        mvprintw(10, 10, "Use UP/DOWN arrows to navigate and ENTER to select");  // ÏÔÊ¾µ¼º½ÌáÊ¾
+        // æ˜¾ç¤ºèœå•é¡¹
+        for(int i = 0; i < 5; i++) {
+            if(i == highlight) {
+                wattron(menu_win, COLOR_PAIR(1));
+                mvwprintw(menu_win, 4 + i, 2, "> %s", main_menu[i]);
+                wattroff(menu_win, COLOR_PAIR(1));
+            } else {
+                wattron(menu_win, COLOR_PAIR(3));
+                mvwprintw(menu_win, 4 + i, 2, "  %s", main_menu[i]);
+                wattroff(menu_win, COLOR_PAIR(3));
+            }
+        }
 
-        // ÏÔÊ¾²¢´¦ÀíÖ÷²Ëµ¥
-        int choice = navigateMenu(stdscr, main_menu, 5, 3, 10);
+        // ç»˜åˆ¶é¢„è§ˆçª—å£
+        wclear(preview_win);
+        drawBorder(preview_win);
+        printTitle(preview_win, "PREVIEW", preview_width);
 
-        switch (choice) {
-            case 0: { // ²úÆ·¹ÜÀí
-                clear();  // Çå³ıÆÁÄ»
-                char* sub_menu[] = {
-                    "1. Add Product",
-                    "2. View Products",
-                    "3. Back to Main Menu"
-                };
-                int subChoice = navigateMenu(stdscr, sub_menu, 3, 3, 10);
+        // æ˜¾ç¤ºé¢„è§ˆå†…å®¹
+        wattron(preview_win, COLOR_PAIR(5) | A_BOLD);
+        mvwprintw(preview_win, 4, 2, "Selected Option: %s", main_menu[highlight]);
+        wattroff(preview_win, COLOR_PAIR(5) | A_BOLD);
 
-                switch (subChoice) {
-                    case 0:
-                        addGoods();  // Ìí¼ÓÉÌÆ·
+        wattron(preview_win, COLOR_PAIR(4) | A_BOLD);
+        mvwprintw(preview_win, 6, 2, "Description:");
+        wattroff(preview_win, COLOR_PAIR(4) | A_BOLD);
+
+        // åˆ†è¡Œæ˜¾ç¤ºé¢„è§ˆæ–‡æœ¬
+        char *preview_text = strdup(previews[highlight]);
+        char *line = strtok(preview_text, "\n");
+        int line_num = 8;
+
+        while(line != NULL) {
+            wattron(preview_win, COLOR_PAIR(3));
+            mvwprintw(preview_win, line_num++, 4, "â€¢ %s", line);
+            wattroff(preview_win, COLOR_PAIR(3));
+            line = strtok(NULL, "\n");
+        }
+        free(preview_text);
+
+        // åº•éƒ¨æç¤º
+        wattron(preview_win, COLOR_PAIR(6));
+        mvwprintw(preview_win, LINES - 4, 2, "Navigate: â†‘/â†“ arrows");
+        mvwprintw(preview_win, LINES - 3, 2, "Select: ENTER key");
+        mvwprintw(preview_win, LINES - 2, 2, "Exit: F10 key");
+        wattroff(preview_win, COLOR_PAIR(6));
+
+        wrefresh(menu_win);
+        wrefresh(preview_win);
+
+        // å¤„ç†ç”¨æˆ·è¾“å…¥
+        int c = wgetch(menu_win);
+        switch(c) {
+            case KEY_UP:
+                if(highlight > 0) highlight--;
+                break;
+            case KEY_DOWN:
+                if(highlight < 4) highlight++;
+                break;
+            case 10: // Enter
+                // å¤„ç†èœå•é¡¹é€‰æ‹©
+                switch (highlight) {
+                    case 0: { // äº§å“ç®¡ç†
+                        clear();
+                        char* sub_menu[] = {
+                            "1. Add Product",
+                            "2. View Products",
+                            "3. Search Products",
+                            "4. Edit Product",
+                            "5. Back to Main Menu"
+                        };
+
+                        // é¢„è§ˆå­èœå•é¡¹
+                        const char *sub_previews[] = {
+                            "Add a new product to the system",
+                            "View all available products",
+                            "Search for specific products",
+                            "Edit existing product details",
+                            "Return to main menu"
+                        };
+
+                        int sub_highlight = 0;
+                        int sub_choice = -1;
+
+                        while(sub_choice == -1) {
+                            // æ˜¾ç¤ºå­èœå•
+                            clear();
+                            attron(COLOR_PAIR(2));
+                            mvprintw(1, 30, "PRODUCT MANAGEMENT");
+                            attroff(COLOR_PAIR(2));
+
+                            for(int i = 0; i < 5; i++) {
+                                if(i == sub_highlight) {
+                                    attron(COLOR_PAIR(1));
+                                    mvprintw(10 + i, 10, "%s", sub_menu[i]);
+                                    attroff(COLOR_PAIR(1));
+                                } else {
+                                    mvprintw(10 + i, 10, "%s", sub_menu[i]);
+                                }
+                            }
+
+                            // é¢„è§ˆå­èœå•é¡¹
+                            attron(COLOR_PAIR(4) | A_BOLD);
+                            mvprintw(5, COLS/2 + 10, "Preview:");
+                            attroff(COLOR_PAIR(4) | A_BOLD);
+
+                            attron(COLOR_PAIR(3));
+                            mvprintw(7, COLS/2 + 10, "%s", sub_previews[sub_highlight]);
+                            attroff(COLOR_PAIR(3));
+
+                            refresh();
+
+                            // å¤„ç†å­èœå•è¾“å…¥
+                            int ch = getch();
+                            switch(ch) {
+                                case KEY_UP:
+                                    if(sub_highlight > 0) sub_highlight--;
+                                    break;
+                                case KEY_DOWN:
+                                    if(sub_highlight < 4) sub_highlight++;
+                                    break;
+                                case 10: // Enter
+                                    sub_choice = sub_highlight;
+                                    break;
+                            }
+                        }
+
+                        switch (sub_choice) {
+                            case 0:
+                                addGoods();
+                                break;
+                            case 1:
+                                viewGoods();
+                                break;
+                            case 4:
+                                // è¿”å›ä¸»èœå•
+                                break;
+                        }
                         break;
-                    case 1:
-                        viewGoods();  // ²é¿´ÉÌÆ·ÁĞ±í
+                    }
+                    case 1: { // è½¦è¾†ç®¡ç†
+                        clear();
+                        char* sub_menu[] = {
+                            "1. Add Vehicle",
+                            "2. View Vehicles",
+                            "3. Search Vehicles",
+                            "4. Assign Vehicle",
+                            "5. Back to Main Menu"
+                        };
+                        int subChoice = navigateMenu(stdscr, sub_menu, 5, 3, 10);
+
+                        switch (subChoice) {
+                            case 0:
+                                addVehicle();
+                                break;
+                            case 1:
+                                viewVehicles();
+                                break;
+                            case 4:
+                                // è¿”å›ä¸»èœå•
+                                break;
+                        }
                         break;
-                    case 2:
-                        // ·µ»ØÖ÷²Ëµ¥
+                    }
+                    case 2: { // ä»“åº“ç®¡ç†
+                        clear();
+                        char* sub_menu[] = {
+                            "1. Add Warehouse",
+                            "2. View Warehouses",
+                            "3. Manage Inventory",
+                            "4. Check Capacity",
+                            "5. Back to Main Menu"
+                        };
+                        int subChoice = navigateMenu(stdscr, sub_menu, 5, 3, 10);
+
+                        switch (subChoice) {
+                            case 0:
+                                addWarehouse();
+                                break;
+                            case 1:
+                                viewWarehouses();
+                                break;
+                            case 4:
+                                // è¿”å›ä¸»èœå•
+                                break;
+                        }
+                        break;
+                    }
+                    case 3: { // è®¢å•ç®¡ç†
+                        clear();
+                        char* sub_menu[] = {
+                            "1. Create Order",
+                            "2. View Orders",
+                            "3. Process Orders",
+                            "4. Complete Orders",
+                            "5. Order History",
+                            "6. Back to Main Menu"
+                        };
+                        int subChoice = navigateMenu(stdscr, sub_menu, 6, 3, 10);
+
+                        switch (subChoice) {
+                            case 0:
+                                createOrder();
+                                break;
+                            case 1:
+                                viewOrders();
+                                break;
+                            case 2:
+                                processOrders();
+                                break;
+                            case 3:
+                                completeOrders();
+                                break;
+                            case 5:
+                                // è¿”å›ä¸»èœå•
+                                break;
+                        }
+                        break;
+                    }
+                    case 4: // é€€å‡ºç³»ç»Ÿ
+                        running = 0;
                         break;
                 }
                 break;
-            }
-            case 1: { // ³µÁ¾¹ÜÀí
-                clear();  // Çå³ıÆÁÄ»
-                char* sub_menu[] = {
-                    "1. Add Vehicle",
-                    "2. View Vehicles",
-                    "3. Back to Main Menu"
-                };
-                int subChoice = navigateMenu(stdscr, sub_menu, 3, 3, 10);
-
-                switch (subChoice) {
-                    case 0:
-                        addVehicle();  // Ìí¼Ó³µÁ¾
-                        break;
-                    case 1:
-                        viewVehicles();  // ²é¿´³µÁ¾ÁĞ±í
-                        break;
-                    case 2:
-                        // ·µ»ØÖ÷²Ëµ¥
-                        break;
-                }
-                break;
-            }
-            case 2: { // ²Ö¿â¹ÜÀí
-                clear();  // Çå³ıÆÁÄ»
-                char* sub_menu[] = {
-                    "1. Add Warehouse",
-                    "2. View Warehouses",
-                    "3. Back to Main Menu"
-                };
-                int subChoice = navigateMenu(stdscr, sub_menu, 3, 3, 10);
-
-                switch (subChoice) {
-                    case 0:
-                        addWarehouse();  // Ìí¼Ó²Ö¿â
-                        break;
-                    case 1:
-                        viewWarehouses();  // ²é¿´²Ö¿âÁĞ±í
-                        break;
-                    case 2:
-                        // ·µ»ØÖ÷²Ëµ¥
-                        break;
-                }
-                break;
-            }
-            case 3: { // ¶©µ¥¹ÜÀí
-                clear();  // Çå³ıÆÁÄ»
-                char* sub_menu[] = {
-                    "1. Create Order",
-                    "2. View Orders",
-                    "3. Process Orders",
-                    "4. Complete Orders",
-                    "5. Back to Main Menu"
-                };
-                int subChoice = navigateMenu(stdscr, sub_menu, 5, 3, 10);
-
-                switch (subChoice) {
-                    case 0:
-                        createOrder();  // ´´½¨¶©µ¥
-                        break;
-                    case 1:
-                        viewOrders();  // ²é¿´¶©µ¥ÁĞ±í
-                        break;
-                    case 2:
-                        processOrders();  // ´¦Àí¶©µ¥
-                        break;
-                    case 3:
-                        completeOrders();  // Íê³É¶©µ¥
-                        break;
-                    case 4:
-                        // ·µ»ØÖ÷²Ëµ¥
-                        break;
-                }
-                break;
-            }
-            case 4: // ÍË³öÏµÍ³
+            case KEY_F(10): // F10é€€å‡º
                 running = 0;
                 break;
         }
     }
 
-    endwin();  // ½áÊøncurses»á»°
+    delwin(menu_win);
+    delwin(preview_win);
+    endwin();
 }
 
-// ÏÔÊ¾Æô¶¯ÆÁÄ»
+// æ˜¾ç¤ºå¯åŠ¨å±å¹•
 void showStartupScreen() {
-    // ³õÊ¼»¯ncurses
+    // åˆå§‹åŒ–ncurses
     initscr();
     cbreak();
     noecho();
-    curs_set(0); // Òş²Ø¹â±ê
-    start_color(); // ÆôÓÃÑÕÉ«Ä£Ê½
+    curs_set(0); // éšè—å…‰æ ‡
+    start_color(); // å¯ç”¨é¢œè‰²æ¨¡å¼
 
-    // ³õÊ¼»¯ÑÕÉ«¶Ô
-    init_pair(1, COLOR_WHITE, COLOR_BLUE);    // ±êÌâ
-    init_pair(2, COLOR_GREEN, COLOR_BLACK);   // ½ø¶ÈÌõ
-    init_pair(3, COLOR_WHITE, COLOR_BLACK);   // ÎÄ±¾
-    init_pair(4, COLOR_CYAN, COLOR_BLACK);    // ±ß¿ò
+    // åˆå§‹åŒ–é¢œè‰²å¯¹
+    init_pair(1, COLOR_WHITE, COLOR_BLUE);     // èƒŒæ™¯
+    init_pair(2, COLOR_GREEN, COLOR_BLACK);    // é«˜äº®
+    init_pair(3, COLOR_WHITE, COLOR_BLACK);    // æ™®é€šæ–‡æœ¬
+    init_pair(4, COLOR_CYAN, COLOR_BLACK);     // è¾¹æ¡†
+    init_pair(5, COLOR_YELLOW, COLOR_BLACK);   // ç³»ç»Ÿæ ‡é¢˜
+    init_pair(6, COLOR_MAGENTA, COLOR_BLACK);  // ç‰¹æ®Šæ•ˆæœ
+    init_pair(7, COLOR_RED, COLOR_BLACK);      // è­¦å‘Šæ–‡æœ¬
 
-    // »ñÈ¡ÆÁÄ»³ß´ç
+    // è·å–å±å¹•å°ºå¯¸
     int rows, cols;
     getmaxyx(stdscr, rows, cols);
 
-    // ÏÔÊ¾±êÌâ
-    attron(COLOR_PAIR(1));
+    // æ˜¾ç¤ºæ ‡é¢˜åŠ¨ç”»
     const char* title = "LOGISTICS MANAGEMENT SYSTEM";
-    mvprintw(rows / 2 - 5, (cols - strlen(title)) / 2, "%s", title);
-    attroff(COLOR_PAIR(1));
+    int title_len = strlen(title);
+    int title_x = (cols - title_len) / 2;
+    int title_y = rows / 2 - 8;
 
-    // »æÖÆ±ß¿ò
+    // æ ‡é¢˜æ·¡å…¥æ•ˆæœ
+    for(int i = 0; i < title_len; i++) {
+        attron(COLOR_PAIR(1) | A_BOLD);
+        mvprintw(title_y, title_x + i, "%c", title[i]);
+        attroff(COLOR_PAIR(1) | A_BOLD);
+        refresh();
+        napms(50);
+    }
+
+    // æ˜¾ç¤ºç‰ˆæœ¬ä¿¡æ¯
+    attron(COLOR_PAIR(3) | A_BOLD);
+    const char* version = "Version 2.0";
+    mvprintw(rows / 2 - 6, (cols - strlen(version)) / 2, "%s", version);
+    attroff(COLOR_PAIR(3) | A_BOLD);
+
+    // ç»˜åˆ¶è¾¹æ¡†
     int box_width = 60;
     int box_height = 10;
     int box_y = rows / 2 - box_height / 2;
     int box_x = (cols - box_width) / 2;
 
+    // è¾¹æ¡†åŠ¨ç”»æ•ˆæœ
     attron(COLOR_PAIR(4));
-    // »æÖÆ½Ç
+    // ç»˜åˆ¶å››ä¸ªè§’
     mvprintw(box_y, box_x, "+");
     mvprintw(box_y, box_x + box_width, "+");
     mvprintw(box_y + box_height, box_x, "+");
     mvprintw(box_y + box_height, box_x + box_width, "+");
+    refresh();
+    napms(100);
 
-    // »æÖÆºáÏß
+    // ç»˜åˆ¶ä¸Šä¸‹è¾¹æ¡†
     for (int i = 1; i < box_width; i++) {
         mvprintw(box_y, box_x + i, "-");
         mvprintw(box_y + box_height, box_x + i, "-");
+        refresh();
+        napms(10);
     }
 
-    // »æÖÆÊúÏß
+    // ç»˜åˆ¶å·¦å³è¾¹æ¡†
     for (int i = 1; i < box_height; i++) {
         mvprintw(box_y + i, box_x, "|");
         mvprintw(box_y + i, box_x + box_width, "|");
+        refresh();
+        napms(20);
     }
+    attroff(COLOR_PAIR(4));
 
-    // »æÖÆ¼ÓÔØÎÄ±¾
-    const char* loading_text = "LOADING...";
+    // ç»˜åˆ¶è¿›åº¦æ¡æ ‡é¢˜
+    const char* loading_text = "INITIALIZING SYSTEM...";
+    attron(COLOR_PAIR(5) | A_BOLD);
     mvprintw(box_y + 2, (cols - strlen(loading_text)) / 2, "%s", loading_text);
+    attroff(COLOR_PAIR(5) | A_BOLD);
 
-    // »æÖÆ½ø¶ÈÌõ¿ò¼Ü
+    // ç»˜åˆ¶è¿›åº¦æ¡è¾¹æ¡†
+    attron(COLOR_PAIR(4));
     mvprintw(box_y + 4, box_x + 2, "[");
     mvprintw(box_y + 4, box_x + box_width - 2, "]");
     attroff(COLOR_PAIR(4));
 
-    // ½ø¶ÈÌõ²ÎÊı
+    // ç»˜åˆ¶è¿›åº¦æ¡
     int bar_width = box_width - 6;
     int bar_y = box_y + 4;
     int bar_x = box_x + 3;
 
-    // ÏÔÊ¾³õÊ¼½ø¶ÈÌõ¿Õ°×
+    // ç»˜åˆ¶è¿›åº¦æ¡åˆå§‹çŠ¶æ€
     attron(COLOR_PAIR(3));
     for (int i = 0; i < bar_width; i++) {
         mvprintw(bar_y, bar_x + i, " ");
@@ -238,77 +418,79 @@ void showStartupScreen() {
     attroff(COLOR_PAIR(3));
     refresh();
 
-    // Ä£Äâ¼ÓÔØ½ø¶È
+    // æ¨¡æ‹Ÿè¿›åº¦æ¡åŠ¨ç”»
     for (int i = 0; i <= bar_width; i++) {
-        // Ìî³ä½ø¶ÈÌõ
+        // ç»˜åˆ¶è¿›åº¦æ¡
         attron(COLOR_PAIR(2));
         for (int j = 0; j < i; j++) {
             mvprintw(bar_y, bar_x + j, "=");
         }
         attroff(COLOR_PAIR(2));
 
-        // ÏÔÊ¾°Ù·Ö±È
+        // æ˜¾ç¤ºç™¾åˆ†æ¯”
         int percent = (i * 100) / bar_width;
         attron(COLOR_PAIR(3));
         mvprintw(box_y + 6, (cols - 4) / 2, "%3d%%", percent);
         attroff(COLOR_PAIR(3));
 
         refresh();
-        napms(50); // ÑÓ³Ù50ºÁÃë
+        napms(30); // å»¶è¿Ÿ30æ¯«ç§’
     }
 
-    // ÏÔÊ¾×¼±¸¾ÍĞ÷ÏûÏ¢
-    const char* ready_text = "SYSTEM READY!";
-    attron(COLOR_PAIR(2));
+    // æ˜¾ç¤ºç³»ç»Ÿå‡†å¤‡å°±ç»ªä¿¡æ¯
+    const char* ready_text = "SYSTEM READY! PRESS ANY KEY";
+    attron(COLOR_PAIR(6) | A_BOLD | A_BLINK);
     mvprintw(box_y + 8, (cols - strlen(ready_text)) / 2, "%s", ready_text);
-    attroff(COLOR_PAIR(2));
+    attroff(COLOR_PAIR(6) | A_BOLD | A_BLINK);
     refresh();
 
-    // µÈ´ıÓÃ»§ÊäÈë
-    napms(1000); // µÈ´ı1Ãë
+    // ç­‰å¾…ç”¨æˆ·è¾“å…¥
     getch();
 
-    // Çå³ıÆÁÄ»²¢Ë¢ĞÂ
+    // æ¸…é™¤å±å¹•
     clear();
     refresh();
 }
 
-// µ¼º½²Ëµ¥º¯Êı
+// å¤„ç†èœå•è¾“å…¥
 int navigateMenu(WINDOW* win, char* choices[], int n_choices, int startY, int startX) {
-    int highlight = 0;  // µ±Ç°Ñ¡ÖĞÏîµÄË÷Òı
-    int choice = 0;  // ÓÃ»§Ñ¡ÔñµÄÏîµÄË÷Òı
-    int c;  // ´æ´¢ÓÃ»§ÊäÈëµÄ×Ö·û
+    int highlight = 0;  // å½“å‰é€‰ä¸­çš„é€‰é¡¹
+    int choice = -1;    // ç”¨æˆ·é€‰æ‹©çš„é€‰é¡¹
+    int c;              // å­˜å‚¨ç”¨æˆ·è¾“å…¥çš„å­—ç¬¦
 
-    // ³õÊ¼»¯ÏîµÄÊôĞÔ
+    // åˆå§‹åŒ–é¢œè‰²
     init_pair(1, COLOR_BLACK, COLOR_WHITE);
 
-    // ÏÔÊ¾²Ëµ¥
-    while(1) {
+    // æ˜¾ç¤ºèœå•é¡¹
+    while(choice == -1) {
         for(int i = 0; i < n_choices; i++) {
             if(i == highlight)
-                wattron(win, COLOR_PAIR(1));  // ÉèÖÃÑ¡ÖĞÏîµÄÑÕÉ«
-            mvwprintw(win, startY + i, startX, "%s", choices[i]);  // ´òÓ¡²Ëµ¥Ïî
+                wattron(win, COLOR_PAIR(1));  // é€‰ä¸­é€‰é¡¹é¢œè‰²
+            mvwprintw(win, startY + i, startX, "%s", choices[i]);  // æ‰“å°èœå•é¡¹
             if(i == highlight)
-                wattroff(win, COLOR_PAIR(1));  // »Ö¸´Ä¬ÈÏÑÕÉ«
+                wattroff(win, COLOR_PAIR(1));  // æ¢å¤é»˜è®¤é¢œè‰²
         }
 
-        wrefresh(win);  // Ë¢ĞÂ´°¿Ú
-        c = wgetch(win);  // »ñÈ¡ÓÃ»§ÊäÈë
+        wrefresh(win);  // åˆ·æ–°å±å¹•
+        c = wgetch(win);  // è·å–ç”¨æˆ·è¾“å…¥
 
         switch(c) {
             case KEY_UP:
                 if(highlight > 0)
-                    highlight--;  // ÏòÉÏÒÆ¶¯Ñ¡ÖĞÏî
+                    highlight--;  // å‘ä¸Šç§»åŠ¨é€‰ä¸­é€‰é¡¹
                 break;
             case KEY_DOWN:
                 if(highlight < n_choices - 1)
-                    highlight++;  // ÏòÏÂÒÆ¶¯Ñ¡ÖĞÏî
+                    highlight++;  // å‘ä¸‹ç§»åŠ¨é€‰ä¸­é€‰é¡¹
                 break;
-            case 10: // Enter¼ü
-                choice = highlight;  // ÓÃ»§°´ÏÂEnter¼ü£¬·µ»ØÑ¡ÖĞÏîµÄË÷Òı
-                return choice;
-            default:
+            case 10: // Enter
+                choice = highlight;  // ç”¨æˆ·Enteré”®é€‰æ‹©é€‰ä¸­é€‰é¡¹
+                break;
+            case KEY_F(10): // F10é€€å‡º
+                choice = n_choices - 1; // é€‰æ‹©æœ€åä¸€é¡¹ï¼ˆé€šå¸¸æ˜¯é€€å‡ºï¼‰
                 break;
         }
     }
+
+    return choice;
 }

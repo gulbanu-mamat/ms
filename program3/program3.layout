@@ -2,9 +2,9 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="vehicle.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="-3" zoom_2="0">
+	<File name="ui.c" open="1" top="1" tabpos="7" split="0" active="1" splitpos="0" zoom_1="-3" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2657" topLine="73" />
+			<Cursor1 position="17849" topLine="460" />
 		</Cursor>
 	</File>
 	<File name="warehouse.c" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="-2" zoom_2="0">
@@ -12,66 +12,57 @@
 			<Cursor1 position="2695" topLine="58" />
 		</Cursor>
 	</File>
-	<File name="library.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1622" topLine="65" />
-		</Cursor>
-	</File>
-	<File name="library.c" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="933" topLine="13" />
-		</Cursor>
-		<Folding>
-			<Collapse line="29" />
-		</Folding>
-	</File>
-	<File name="order.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="-3" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="14726" topLine="96" />
-		</Cursor>
-	</File>
 	<File name="order.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="159" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="fileio.c" open="1" top="1" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="order.c" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="-3" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="4133" topLine="0" />
+			<Cursor1 position="14462" topLine="344" />
 		</Cursor>
 	</File>
-	<File name="ui.c" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="-3" zoom_2="0">
+	<File name="ui.h" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="82" topLine="0" />
-		</Cursor>
-		<Folding>
-			<Collapse line="8" />
-			<Collapse line="13" />
-			<Collapse line="22" />
-			<Collapse line="28" />
-			<Collapse line="169" />
-			<Collapse line="276" />
-		</Folding>
-	</File>
-	<File name="main.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="-2" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1970" topLine="18" />
+			<Cursor1 position="358" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="goods.c" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="-3" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="178" topLine="0" />
+			<Cursor1 position="1373" topLine="55" />
 		</Cursor>
 		<Folding>
 			<Collapse line="9" />
-			<Collapse line="20" />
 			<Collapse line="96" />
 			<Collapse line="144" />
 		</Folding>
 	</File>
-	<File name="ui.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="library.c" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="317" topLine="0" />
+			<Cursor1 position="933" topLine="5" />
+		</Cursor>
+		<Folding>
+			<Collapse line="29" />
+		</Folding>
+	</File>
+	<File name="library.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1900" topLine="66" />
+		</Cursor>
+	</File>
+	<File name="main.c" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="-2" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="835" topLine="8" />
+		</Cursor>
+	</File>
+	<File name="vehicle.c" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="-3" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2657" topLine="73" />
+		</Cursor>
+	</File>
+	<File name="fileio.c" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3036" topLine="65" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

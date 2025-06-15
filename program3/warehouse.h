@@ -6,5 +6,4 @@
 void addWarehouse(void);
 void viewWarehouses(void);
 
-
 #endif // WAREHOUSE_H_INCLUDED

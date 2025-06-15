@@ -1,0 +1,75 @@
+# Integrated Makefile with Authentication System
+
+CXX = g++
+CXXFLAGS = -Wall -Wextra -std=c++11
+LIBS = -lncurses -lsqlite3
+
+# Source files
+AUTH_SOURCES = auth_system.cpp
+MAIN_SOURCES = main_with_auth.cpp
+EXISTING_SOURCES = library.cpp ui.cpp fileio.cpp goods.cpp vehicle.cpp warehouse.cpp order.cpp sqlite_db.cpp
+
+# Object files
+AUTH_OBJECTS = $(AUTH_SOURCES:.cpp=.o)
+MAIN_OBJECTS = $(MAIN_SOURCES:.cpp=.o)
+EXISTING_OBJECTS = $(EXISTING_SOURCES:.cpp=.o)
+
+ALL_OBJECTS = $(AUTH_OBJECTS) $(MAIN_OBJECTS) $(EXISTING_OBJECTS)
+
+# Target executable
+TARGET = warehouse_system_with_auth
+
+# Default target
+all: $(TARGET)
+
+# Link the executable
+$(TARGET): $(ALL_OBJECTS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(ALL_OBJECTS) $(LIBS)
+
+# Compile authentication system
+auth_system.o: auth_system.cpp auth_system.h
+	$(CXX) $(CXXFLAGS) -c auth_system.cpp
+
+# Compile main program
+main_with_auth.o: main_with_auth.cpp auth_system.h library.h sqlite_db.h
+	$(CXX) $(CXXFLAGS) -c main_with_auth.cpp
+
+# Compile existing source files
+library.o: library.cpp library.h
+	$(CXX) $(CXXFLAGS) -c library.cpp
+
+ui.o: ui.cpp ui.h library.h
+	$(CXX) $(CXXFLAGS) -c ui.cpp
+
+fileio.o: fileio.cpp fileio.h library.h
+	$(CXX) $(CXXFLAGS) -c fileio.cpp
+
+goods.o: goods.cpp goods.h library.h
+	$(CXX) $(CXXFLAGS) -c goods.cpp
+
+vehicle.o: vehicle.cpp vehicle.h library.h
+	$(CXX) $(CXXFLAGS) -c vehicle.cpp
+
+warehouse.o: warehouse.cpp warehouse.h library.h
+	$(CXX) $(CXXFLAGS) -c warehouse.cpp
+
+order.o: order.cpp order.h library.h
+	$(CXX) $(CXXFLAGS) -c order.cpp
+
+sqlite_db.o: sqlite_db.cpp sqlite_db.h
+	$(CXX) $(CXXFLAGS) -c sqlite_db.cpp
+
+# Clean up
+clean:
+	del *.o $(TARGET).exe 2>nul || true
+
+# Run the program
+run: $(TARGET)
+	./$(TARGET)
+
+# Install dependencies (for reference)
+install-deps:
+	# On Ubuntu/Debian: sudo apt-get install libncurses5-dev libsqlite3-dev
+	# On Windows with MinGW: Install ncurses and sqlite3 libraries
+
+.PHONY: all clean run install-deps 

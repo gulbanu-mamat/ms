@@ -14,7 +14,13 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-omp" />
+					<Add directory="C:/msys64/mingw64/include" />
 				</Compiler>
+				<Linker>
+					<Add library="sqlite3" />
+					<Add library="ncursesw" />
+					<Add directory="C:/msys64/mingw64/lib" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/program3" prefix_auto="1" extension_auto="1" />
@@ -23,49 +29,43 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="C:/msys64/mingw64/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="sqlite3" />
+					<Add library="ncursesw" />
+					<Add directory="C:/msys64/mingw64/lib" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="fileio.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="auth_system.cpp" />
+		<Unit filename="auth_system.h" />
+		<Unit filename="database_menu.cpp" />
+		<Unit filename="database_menu.h" />
+		<Unit filename="fileio.cpp" />
 		<Unit filename="fileio.h" />
-		<Unit filename="goods.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="goods.cpp" />
 		<Unit filename="goods.h" />
-		<Unit filename="library.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="library.cpp" />
 		<Unit filename="library.h" />
-		<Unit filename="main.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="order.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="main.cpp" />
+		<Unit filename="order.cpp" />
 		<Unit filename="order.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="ui.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="sqlite_db.cpp" />
+		<Unit filename="sqlite_db.h" />
+		<Unit filename="ui.cpp" />
 		<Unit filename="ui.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="vehicle.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="vehicle.cpp" />
 		<Unit filename="vehicle.h" />
-		<Unit filename="warehouse.c">
-			<Option compilerVar="CC" />
-		</Unit>
+		<Unit filename="warehouse.cpp" />
 		<Unit filename="warehouse.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />

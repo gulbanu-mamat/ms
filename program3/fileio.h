@@ -1,5 +1,5 @@
-#ifndef FILEIO_H
-#define FILEIO_H
+#ifndef FILEIO_H_INCLUDED
+#define FILEIO_H_INCLUDED
 #include "library.h"
 
 void saveGoods(void);
@@ -11,4 +11,4 @@ void loadWarehouses(void);
 void saveOrders(void);
 void loadOrders(void);
 
-#endif
+#endif // FILEIO_H_INCLUDED

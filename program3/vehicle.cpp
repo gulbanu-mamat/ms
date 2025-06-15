@@ -1,5 +1,6 @@
 #include "vehicle.h"
 #include "fileio.h"
+#include "ui.h"
 #include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -63,6 +64,11 @@ void addVehicle() {
 
     vehiclesList[vehiclesCount++] = v;  // 将车辆添加到车辆列表
     saveVehicles();  // 保存车辆信息
+    
+    // 同时保存到SQLite数据库
+    if (sqlite_insert_vehicle(&g_database, v.type, v.plateNumber, (int)v.maxLoad) != 0) {
+        printf("警告：车辆保存到SQLite数据库失败\n");
+    }
 
     // 车辆添加成功，显示提示信息
      initCarsColors(); // 初始化自定义颜色

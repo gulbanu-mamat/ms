@@ -1,6 +1,7 @@
 #include "goods.h"
 #include "fileio.h"
 #include "library.h"
+#include "ui.h"
 #include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -78,13 +79,18 @@ void addGoods() {
     noecho();  // 关闭回显模式
 
     goodsList[goodsCount++] = g;  // 将商品添加到商品列表
+    
+    // 同时保存到SQLite数据库
+    if (sqlite_insert_goods(&g_database, g.name, g.quantity, g.price, g.type) != 0) {
+        printf("警告：商品保存到SQLite数据库失败\n");
+    }
 
     // 商品添加成功，显示提示信息
 
    // 使用蓝色加粗显示成功提示
     initCustomColors(); // 初始化自定义颜色
     wattron(win, COLOR_PAIR(4) | A_BOLD); // 启用蓝色和粗体属性
-    printCentered(win, 20, "Warehouse added successfully! Press any key to return...", 60);
+    printCentered(win, 20, "Product added successfully! Press any key to return...", 60);
     wattroff(win, COLOR_PAIR(4) | A_BOLD); // 禁用属性
 
 

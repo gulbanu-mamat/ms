@@ -1,12 +1,22 @@
 #ifndef LIBRARY_H_INCLUDED
 #define LIBRARY_H_INCLUDED
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <ctype.h>
+
+// C++æ ‡å‡†åº“å¤´æ–‡ä»¶
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <cctype>
+#include <string>
+#include <vector>
+#include <memory>
 #include <ncurses.h>
-// ³£Á¿¶¨Òå
+
+// ä½¿ç”¨æ ‡å‡†å‘½åç©ºé—´
+using namespace std;
+
+// 
 #define MAX_NAME_LEN 50
 #define MAX_TYPE_LEN 30
 #define MAX_ADDR_LEN 100
@@ -20,7 +30,7 @@
 #define MAX_WAREHOUSES 20
 #define MAX_ORDERS 100
 
-// ½á¹¹Ìå¶¨Òå
+// ï¿½á¹¹ï¿½å¶¨ï¿½ï¿½
 typedef struct {
     int id;
     char name[MAX_NAME_LEN];
@@ -68,7 +78,7 @@ typedef struct {
     int assignedVehicle; // -1 means unassigned
 } Order;
 
-// È«¾Ö±äÁ¿ÉùÃ÷
+// å…¨å±€å˜é‡å£°æ˜
 extern Goods goodsList[MAX_GOODS];
 extern int goodsCount, nextGoodsId;
 extern Vehicle vehiclesList[MAX_VEHICLES];
@@ -78,10 +88,14 @@ extern int warehousesCount, nextWarehouseId;
 extern Order ordersList[MAX_ORDERS];
 extern int ordersCount, nextOrderId;
 
-// ¹¤¾ßº¯Êı
+// SQLiteæ•°æ®åº“å…¨å±€å˜é‡
+#include "sqlite_db.h"
+extern SQLiteDB g_database;
+
+// ï¿½ï¿½ï¿½ßºï¿½ï¿½ï¿½
 void getCurrentDateTime(char* buffer);
-void drawBorder(); // È·±£Ö»ÓĞÒ»¸ö²ÎÊı
-void printTitle(); // È·±£Ö»ÓĞÁ½¸ö²ÎÊı
+void drawBorder(WINDOW* win); // ä¿®æ­£å‡½æ•°å£°æ˜ï¼Œæ·»åŠ WINDOW*å‚æ•°
+void printTitle(WINDOW* win, const char* title, int width); // ä¿®æ­£å‡½æ•°å£°æ˜ï¼Œæ·»åŠ å‚æ•°
 void printCentered(WINDOW* win, int y, const char* msg, int width);
 void loadGoods();
 void loadVehicles();

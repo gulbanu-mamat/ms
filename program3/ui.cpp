@@ -62,6 +62,7 @@ void showMainMenu() {
         "Manage transportation vehicles:\n- Add new vehicles\n- View vehicle list\n- Assign vehicles to routes\n- Track vehicle status",
         "Manage storage facilities:\n- Add new warehouses\n- View warehouse inventory\n- Manage stock levels\n- Track storage capacity",
         "Handle customer orders:\n- Create new orders\n- View order history\n- Process pending orders\n- Complete deliveries",
+        "View SQLite database contents:\n- Browse warehouse records\n- Check goods inventory\n- Review vehicle data\n- Analyze order statistics",
         "Exit the system and save all data"
     };
 
@@ -79,11 +80,12 @@ void showMainMenu() {
             "2. Vehicle Management",
             "3. Warehouse Management",
             "4. Order Management",
-            "5. Exit System"
+            "5. Database Viewer",
+            "6. Exit System"
         };
 
         // 显示菜单项
-        for(int i = 0; i < 5; i++) {
+        for(int i = 0; i < 6; i++) {
             if(i == highlight) {
                 wattron(menu_win, COLOR_PAIR(1));
                 mvwprintw(menu_win, 4 + i, 2, "> %s", main_menu[i]);
@@ -139,7 +141,7 @@ void showMainMenu() {
                 if(highlight > 0) highlight--;
                 break;
             case KEY_DOWN:
-                if(highlight < 4) highlight++;
+                if(highlight < 5) highlight++;
                 break;
             case 10: // Enter
                 // 处理菜单项选择
@@ -301,7 +303,29 @@ void showMainMenu() {
                         }
                         break;
                     }
-                    case 4: // 退出系统
+                    case 4: { // 数据库查看器
+                        clear();
+                        endwin(); // 临时退出ncurses模式
+                        showDatabaseMenu(); // 调用数据库菜单
+                        // 重新初始化ncurses
+                        initscr();
+                        start_color();
+                        cbreak();
+                        noecho();
+                        keypad(stdscr, TRUE);
+                        curs_set(0);
+                        refresh();
+                        // 重新初始化颜色对
+                        init_pair(1, COLOR_BLACK, COLOR_WHITE);
+                        init_pair(2, COLOR_WHITE, COLOR_BLUE);
+                        init_pair(3, COLOR_CYAN, COLOR_BLACK);
+                        init_pair(4, COLOR_YELLOW, COLOR_BLACK);
+                        init_pair(5, COLOR_MAGENTA, COLOR_BLACK);
+                        init_pair(6, COLOR_GREEN, COLOR_BLACK);
+                        init_pair(7, COLOR_RED, COLOR_BLACK);
+                        break;
+                    }
+                    case 5: // 退出系统
                         running = 0;
                         break;
                 }

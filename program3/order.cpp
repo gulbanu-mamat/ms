@@ -2,12 +2,13 @@
 #include "goods.h"
 #include "vehicle.h"
 #include "fileio.h"
+#include "ui.h"
 #include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-// createOrder��viewOrders��processOrders��completeOrders��ʵ��
+// createOrder��viewOrders��processOrders��completeOrders��ʵ��
 void createOrder() {
     if (goodsCount == 0) {
         WINDOW* popup = newwin(5, 40, 10, 20);
@@ -114,8 +115,31 @@ void createOrder() {
     }
 
     ordersList[ordersCount++] = o;
-    saveOrders(); // �Զ�����
-    saveGoods();  // ��Ʒ���Ҳ����
+    saveOrders(); // 自动保存
+    saveGoods();  // 商品库存也保存
+    
+    // 同时保存到SQLite数据库（简化处理，保存第一个商品的订单信息）
+    if (o.itemCount > 0) {
+        // 计算总价（简化处理）
+        double totalPrice = 0.0;
+        for (int i = 0; i < o.itemCount; i++) {
+            int goodsIndex = findGoodsById(o.items[i].goodsId);
+            if (goodsIndex != -1) {
+                totalPrice += goodsList[goodsIndex].price * o.items[i].quantity;
+            }
+        }
+        
+        // 保存第一个商品的订单到数据库
+        char orderId[20];
+        sprintf(orderId, "ORD%d", o.id);
+        int goodsIndex = findGoodsById(o.items[0].goodsId);
+        if (goodsIndex != -1) {
+            if (sqlite_insert_order(&g_database, orderId, o.customerName, 
+                                  goodsList[goodsIndex].name, o.items[0].quantity, totalPrice) != 0) {
+                printf("警告：订单保存到SQLite数据库失败\n");
+            }
+        }
+    }
 
     printCentered(win, 16, "Order created successfully! Press any key to return...", 60);
     wrefresh(win);
@@ -372,7 +396,7 @@ void completeOrders() {
     // Update order status
     strcpy(ordersList[orderIndex].status, "Completed");
     getCurrentDateTime(ordersList[orderIndex].deliveryTime);
-    // �ͷų���
+    // �ͷų���
     int vehicleId = ordersList[orderIndex].assignedVehicle;
     for (int i = 0; i < vehiclesCount; i++) {
         if (vehiclesList[i].id == vehicleId) {

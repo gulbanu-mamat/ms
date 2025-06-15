@@ -1,0 +1,4 @@
+admin;Admin123456;normal
+testuser;Initial123;initial 
+gulbanu;gul20041130;normal
+Alice;alice123456;normal

@@ -1,5 +1,6 @@
 #include "warehouse.h"
 #include "fileio.h"
+#include "ui.h"
 #include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -56,6 +57,11 @@ void addWarehouse() {
 
     warehousesList[warehousesCount++] = w;  // 将仓库添加到仓库列表
     saveWarehouses();  // 保存仓库信息
+    
+    // 同时保存到SQLite数据库
+    if (sqlite_insert_warehouse(&g_database, w.name, w.location, (int)w.capacity) != 0) {
+        printf("警告：仓库保存到SQLite数据库失败\n");
+    }
 
     // 仓库添加成功，显示提示信息
     initWarehouseColors(); // 初始化自定义颜色

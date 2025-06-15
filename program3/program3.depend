@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1748936862 source:d:\程序设计\programs\program3\main.c
+1749933281 source:d:\程序设计\programs\program3\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -7,6 +7,7 @@
 	<ctype.h>
 	<ncurses.h>
 	"library.h"
+	"sqlite_db.h"
 
 1748937342 source:d:\程序设计\programs\program3\library.c
 	"library.h"
@@ -15,7 +16,95 @@
 	<string.h>
 	<time.h>
 
-1749557867 d:\程序设计\programs\program3\library.h
+1749939277 d:\程序设计\programs\program3\library.h
+	<iostream>
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<ctime>
+	<cctype>
+	<string>
+	<vector>
+	<memory>
+	<ncurses.h>
+	"sqlite_db.h"
+
+1748937342 source:d:\程序设计\programs\program3\fileio.c
+	"fileio.h"
+	<stdio.h>
+
+1749939348 d:\程序设计\programs\program3\fileio.h
+	"library.h"
+
+1749933303 source:d:\程序设计\programs\program3\goods.c
+	"goods.h"
+	"fileio.h"
+	"library.h"
+	"ui.h"
+	<ncurses.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1749939288 d:\程序设计\programs\program3\goods.h
+	"library.h"
+
+1749933399 source:d:\程序设计\programs\program3\order.c
+	"order.h"
+	"goods.h"
+	"vehicle.h"
+	"fileio.h"
+	"ui.h"
+	<ncurses.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1749939323 d:\程序设计\programs\program3\order.h
+	"library.h"
+
+1749939311 d:\程序设计\programs\program3\vehicle.h
+	"library.h"
+
+1749933350 source:d:\程序设计\programs\program3\vehicle.c
+	"vehicle.h"
+	"fileio.h"
+	"ui.h"
+	<ncurses.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1749933323 source:d:\程序设计\programs\program3\warehouse.c
+	"warehouse.h"
+	"fileio.h"
+	"ui.h"
+	<ncurses.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1749939300 d:\程序设计\programs\program3\warehouse.h
+	"library.h"
+
+1749934014 source:d:\程序设计\programs\program3\ui.c
+	"ui.h"
+	"library.h"
+	<ncurses.h>
+	<string.h>
+
+1749939375 d:\程序设计\programs\program3\ui.h
+	"library.h"
+	"database_menu.h"
+
+1748937342 source:c:\users\administrator\documents\github\ms\program3\fileio.c
+	"fileio.h"
+	<stdio.h>
+
+1748763338 c:\users\administrator\documents\github\ms\program3\fileio.h
+	"library.h"
+
+1749557867 c:\users\administrator\documents\github\ms\program3\library.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -23,14 +112,7 @@
 	<ctype.h>
 	<ncurses.h>
 
-1748937342 source:d:\程序设计\programs\program3\fileio.c
-	"fileio.h"
-	<stdio.h>
-
-1748763338 d:\程序设计\programs\program3\fileio.h
-	"library.h"
-
-1748938364 source:d:\程序设计\programs\program3\goods.c
+1748938364 source:c:\users\administrator\documents\github\ms\program3\goods.c
 	"goods.h"
 	"fileio.h"
 	"library.h"
@@ -39,10 +121,26 @@
 	<stdlib.h>
 	<string.h>
 
-1748763338 d:\程序设计\programs\program3\goods.h
+1748763338 c:\users\administrator\documents\github\ms\program3\goods.h
 	"library.h"
 
-1748937377 source:d:\程序设计\programs\program3\order.c
+1748937342 source:c:\users\administrator\documents\github\ms\program3\library.c
+	"library.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+
+1748936862 source:c:\users\administrator\documents\github\ms\program3\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+	<ctype.h>
+	<ncurses.h>
+	"library.h"
+
+1748937377 source:c:\users\administrator\documents\github\ms\program3\order.c
 	"order.h"
 	"goods.h"
 	"vehicle.h"
@@ -52,13 +150,22 @@
 	<stdlib.h>
 	<string.h>
 
-1748764338 d:\程序设计\programs\program3\order.h
+1748764338 c:\users\administrator\documents\github\ms\program3\order.h
 	"library.h"
 
-1748763338 d:\程序设计\programs\program3\vehicle.h
+1748763338 c:\users\administrator\documents\github\ms\program3\vehicle.h
 	"library.h"
 
-1748938364 source:d:\程序设计\programs\program3\vehicle.c
+1749557604 source:c:\users\administrator\documents\github\ms\program3\ui.c
+	"ui.h"
+	"library.h"
+	<ncurses.h>
+	<string.h>
+
+1749557366 c:\users\administrator\documents\github\ms\program3\ui.h
+	"library.h"
+
+1748938364 source:c:\users\administrator\documents\github\ms\program3\vehicle.c
 	"vehicle.h"
 	"fileio.h"
 	<ncurses.h>
@@ -66,7 +173,7 @@
 	<stdlib.h>
 	<string.h>
 
-1748938496 source:d:\程序设计\programs\program3\warehouse.c
+1748938496 source:c:\users\administrator\documents\github\ms\program3\warehouse.c
 	"warehouse.h"
 	"fileio.h"
 	<ncurses.h>
@@ -74,15 +181,448 @@
 	<stdlib.h>
 	<string.h>
 
-1748763338 d:\程序设计\programs\program3\warehouse.h
+1748763338 c:\users\administrator\documents\github\ms\program3\warehouse.h
 	"library.h"
 
-1749557604 source:d:\程序设计\programs\program3\ui.c
+1749931739 source:d:\程序设计\programs\program3\sqlite_db.c
+	"sqlite_db.h"
+
+1749931584 d:\程序设计\programs\program3\sqlite_db.h
+	<sqlite3.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1749370567 c:\msys64\mingw64\include\stdio.h
+	<corecrt_stdio_config.h>
+	<_mingw_off_t.h>
+	<swprintf.inl>
+	<sec_api/stdio_s.h>
+
+1749370567 c:\msys64\mingw64\include\corecrt_stdio_config.h
+	<corecrt.h>
+
+1749370567 c:\msys64\mingw64\include\corecrt.h
+	<_mingw.h>
+	<winapifamily.h>
+
+1749370567 c:\msys64\mingw64\include\_mingw.h
+	"_mingw_mac.h"
+	"_mingw_secapi.h"
+	"_cygwin.h"
+	<vadefs.h>
+	"sdks/_mingw_ddk.h"
+
+1749370567 c:\msys64\mingw64\include\_mingw_mac.h
+
+1749370567 c:\msys64\mingw64\include\_mingw_secapi.h
+
+1749370567 c:\msys64\mingw64\include\_cygwin.h
+	<stddef.h>
+
+1749370567 c:\msys64\mingw64\include\stddef.h
+	<crtdefs.h>
+
+1749370567 c:\msys64\mingw64\include\crtdefs.h
+	<corecrt.h>
+
+1749370567 c:\msys64\mingw64\include\vadefs.h
+	<_mingw.h>
+
+1749370567 c:\msys64\mingw64\include\sdks\_mingw_ddk.h
+
+1749370567 c:\msys64\mingw64\include\winapifamily.h
+
+1749370567 c:\msys64\mingw64\include\_mingw_off_t.h
+
+1749370567 c:\msys64\mingw64\include\swprintf.inl
+
+1749370567 c:\msys64\mingw64\include\sec_api\stdio_s.h
+	<stdio.h>
+
+1749370567 c:\msys64\mingw64\include\stdlib.h
+	<corecrt.h>
+	<corecrt_wstdlib.h>
+	<limits.h>
+	<sec_api/stdlib_s.h>
+	<malloc.h>
+
+1749370567 c:\msys64\mingw64\include\corecrt_wstdlib.h
+	<corecrt.h>
+
+1749370567 c:\msys64\mingw64\include\limits.h
+	<crtdefs.h>
+
+1749370567 c:\msys64\mingw64\include\sec_api\stdlib_s.h
+	<stdlib.h>
+
+1749370567 c:\msys64\mingw64\include\malloc.h
+	<crtdefs.h>
+	<mm_malloc.h>
+
+1749370567 c:\msys64\mingw64\include\string.h
+	<crtdefs.h>
+	<sec_api/string_s.h>
+
+1749370567 c:\msys64\mingw64\include\sec_api\string_s.h
+	<string.h>
+
+1749370567 c:\msys64\mingw64\include\time.h
+	<crtdefs.h>
+	<sys/timeb.h>
+	<_timeval.h>
+	<pthread_time.h>
+
+1749370567 c:\msys64\mingw64\include\sys\timeb.h
+	<crtdefs.h>
+	<sec_api/sys/timeb_s.h>
+
+1749370567 c:\msys64\mingw64\include\sec_api\sys\timeb_s.h
+	<sys/timeb.h>
+
+1749370567 c:\msys64\mingw64\include\_timeval.h
+
+1749371126 c:\msys64\mingw64\include\pthread_time.h
+	<sys/timeb.h>
+	"pthread_compat.h"
+
+1749371126 c:\msys64\mingw64\include\pthread_compat.h
+
+1749370567 c:\msys64\mingw64\include\ctype.h
+	<corecrt_wctype.h>
+
+1749370567 c:\msys64\mingw64\include\corecrt_wctype.h
+	<corecrt.h>
+
+1749930515 c:\msys64\mingw64\include\ncurses.h
+	<ncursesw/ncurses_dll.h>
+	<stdint.h>
+	<stdnoreturn.h>
+	<stdio.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdbool.h>
+	<libutf8.h>
+	<wchar.h>
+	<ncursesw/unctrl.h>
+
+1736321940 c:\msys64\mingw64\include\ncursesw\ncurses_dll.h
+
+1749370567 c:\msys64\mingw64\include\stdint.h
+	<crtdefs.h>
+	<stddef.h>
+
+1749370567 c:\msys64\mingw64\include\stdarg.h
+	<_mingw_stdarg.h>
+
+1749370567 c:\msys64\mingw64\include\_mingw_stdarg.h
+	<vadefs.h>
+
+1749370567 c:\msys64\mingw64\include\wchar.h
+	<corecrt.h>
+	<corecrt_stdio_config.h>
+	<corecrt_wstdlib.h>
+	<corecrt_wctype.h>
+	<_mingw_off_t.h>
+	<_mingw_stat64.h>
+	<swprintf.inl>
+	<sec_api/wchar_s.h>
+
+1749370567 c:\msys64\mingw64\include\_mingw_stat64.h
+
+1749370567 c:\msys64\mingw64\include\sec_api\wchar_s.h
+	<wchar.h>
+
+1736321940 c:\msys64\mingw64\include\ncursesw\unctrl.h
+	<ncursesw/curses.h>
+
+1736321940 c:\msys64\mingw64\include\ncursesw\curses.h
+	<ncursesw/ncurses_dll.h>
+	<stdint.h>
+	<stdnoreturn.h>
+	<stdio.h>
+	<stdarg.h>
+	<stddef.h>
+	<stdbool.h>
+	<libutf8.h>
+	<wchar.h>
+	<ncursesw/unctrl.h>
+
+1749287016 c:\msys64\mingw64\include\sqlite3.h
+	<stdarg.h>
+
+1749933687 d:\程序设计\programs\program3\database_menu.h
+	"sqlite_db.h"
+
+1749935104 source:d:\程序设计\programs\program3\database_menu.c
+	"database_menu.h"
+	"ui.h"
+	"library.h"
+	<ncurses.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1749935104 source:d:\程序设计\programs\program3\database_menu.cpp
+	"database_menu.h"
+	"ui.h"
+	"library.h"
+	<ncurses.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1749958540 source:d:\程序设计\programs\program3\fileio.cpp
+	"fileio.h"
+	<stdio.h>
+	<string.h>
+	<iostream>
+
+1749933303 source:d:\程序设计\programs\program3\goods.cpp
+	"goods.h"
+	"fileio.h"
+	"library.h"
+	"ui.h"
+	<ncurses.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1748937342 source:d:\程序设计\programs\program3\library.cpp
+	"library.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+
+1749933399 source:d:\程序设计\programs\program3\order.cpp
+	"order.h"
+	"goods.h"
+	"vehicle.h"
+	"fileio.h"
+	"ui.h"
+	<ncurses.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1749934014 source:d:\程序设计\programs\program3\ui.cpp
 	"ui.h"
 	"library.h"
 	<ncurses.h>
 	<string.h>
 
-1749557366 d:\程序设计\programs\program3\ui.h
+1749933350 source:d:\程序设计\programs\program3\vehicle.cpp
+	"vehicle.h"
+	"fileio.h"
+	"ui.h"
+	<ncurses.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1749933323 source:d:\程序设计\programs\program3\warehouse.cpp
+	"warehouse.h"
+	"fileio.h"
+	"ui.h"
+	<ncurses.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1749960573 source:d:\程序设计\programs\program3\main.cpp
+	<iostream>
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<ctime>
+	<cctype>
+	<ncurses.h>
 	"library.h"
+	"sqlite_db.h"
+	"auth_system.h"
+
+1749939520 source:d:\程序设计\programs\program3\sqlite_db.cpp
+	"sqlite_db.h"
+	<iostream>
+	<cstdio>
+	<cstring>
+
+1749961297 source:d:\程序设计\programs\program3\auth_system.cpp
+	"auth_system.h"
+	<sys/stat.h>
+	<sys/types.h>
+
+1749956983 d:\程序设计\programs\program3\auth_system.h
+	<iostream>
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<ctime>
+	<cctype>
+	<string>
+	<vector>
+	<fstream>
+	<sstream>
+	<ncurses.h>
+
+1749370567 c:\msys64\mingw64\include\sys\stat.h
+	<crtdefs.h>
+	<io.h>
+	<sys/types.h>
+	<_mingw_stat64.h>
+
+1749370567 c:\msys64\mingw64\include\io.h
+	<crtdefs.h>
+	<string.h>
+	<_mingw_off_t.h>
+	<string.h>
+
+1749370567 c:\msys64\mingw64\include\sys\types.h
+	<crtdefs.h>
+	<_mingw_off_t.h>
+
+1749935104 source:d:\程序设计\program3\database_menu.cpp
+	"database_menu.h"
+	"ui.h"
+	"library.h"
+	<ncurses.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1749933687 d:\程序设计\program3\database_menu.h
+	"sqlite_db.h"
+
+1749931584 d:\程序设计\program3\sqlite_db.h
+	<sqlite3.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1749939375 d:\程序设计\program3\ui.h
+	"library.h"
+	"database_menu.h"
+
+1749939277 d:\程序设计\program3\library.h
+	<iostream>
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<ctime>
+	<cctype>
+	<string>
+	<vector>
+	<memory>
+	<ncurses.h>
+	"sqlite_db.h"
+
+1749958540 source:d:\程序设计\program3\fileio.cpp
+	"fileio.h"
+	<stdio.h>
+	<string.h>
+	<iostream>
+
+1749939348 d:\程序设计\program3\fileio.h
+	"library.h"
+
+1749933303 source:d:\程序设计\program3\goods.cpp
+	"goods.h"
+	"fileio.h"
+	"library.h"
+	"ui.h"
+	<ncurses.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1748937342 source:d:\程序设计\program3\library.cpp
+	"library.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+
+1749960573 source:d:\程序设计\program3\main.cpp
+	<iostream>
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<ctime>
+	<cctype>
+	<ncurses.h>
+	"library.h"
+	"sqlite_db.h"
+	"auth_system.h"
+
+1749979386 d:\程序设计\program3\auth_system.h
+	<iostream>
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<ctime>
+	<cctype>
+	<string>
+	<vector>
+	<fstream>
+	<sstream>
+	<ncurses.h>
+
+1749933399 source:d:\程序设计\program3\order.cpp
+	"order.h"
+	"goods.h"
+	"vehicle.h"
+	"fileio.h"
+	"ui.h"
+	<ncurses.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1749939323 d:\程序设计\program3\order.h
+	"library.h"
+
+1749939311 d:\程序设计\program3\vehicle.h
+	"library.h"
+
+1749939520 source:d:\程序设计\program3\sqlite_db.cpp
+	"sqlite_db.h"
+	<iostream>
+	<cstdio>
+	<cstring>
+
+1749934014 source:d:\程序设计\program3\ui.cpp
+	"ui.h"
+	"library.h"
+	<ncurses.h>
+	<string.h>
+
+1749933350 source:d:\程序设计\program3\vehicle.cpp
+	"vehicle.h"
+	"fileio.h"
+	"ui.h"
+	<ncurses.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1749933323 source:d:\程序设计\program3\warehouse.cpp
+	"warehouse.h"
+	"fileio.h"
+	"ui.h"
+	<ncurses.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1749939300 d:\程序设计\program3\warehouse.h
+	"library.h"
+
+1749979856 d:\程序设计\program3\goods.h
+	"library.h"
+
+1749980127 source:d:\程序设计\program3\auth_system.cpp
+	"auth_system.h"
+	<sys/stat.h>
+	<sys/types.h>
 

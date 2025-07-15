@@ -3,9 +3,8 @@
 
 #include "library.h"
 
-// Function declarations for goods management
-void addGoods();
-void viewGoods();
+void addGoods(void);
+void viewGoods(void);
 int findGoodsById(int id);
 
-#endif // GOODS_H_INCLUDED 
+#endif // GOODS_H_INCLUDED

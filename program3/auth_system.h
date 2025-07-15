@@ -27,8 +27,6 @@ typedef struct {
     char username[MAX_USERNAME_LEN];
     char password[MAX_PASSWORD_LEN];
     char status[10]; // "initial" or "normal"
-    int failedAttempts; // Track failed login attempts
-    time_t freezeTime; // Time when account was frozen
 } User;
 
 // Authentication system functions
@@ -42,11 +40,8 @@ void adminMenu(User users[], int *userCount);
 void userMenu(User users[], int userCount, int userIndex, const char *username);
 void registerUser(User users[], int *userCount);
 void resetUserPassword(User users[], int userCount);
-void deleteUser(User users[], int *userCount);
 void clearInputBuffer();
 void createUserDirectory(const char *username);
-bool isUserFrozen(User *user);
-void freezeUser(User *user);
 
 // User interface functions with ncurses
 int showLoginScreen(User users[], int userCount);

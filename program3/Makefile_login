@@ -1,0 +1,33 @@
+# Makefile for Login System
+
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c99
+
+# 目标文件
+TARGET = login_system
+OBJS = main_login.o login_system.o
+
+# 默认目标
+all: $(TARGET)
+
+# 编译主程序
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+
+# 编译主函数
+main_login.o: main_login.c login_system.h
+	$(CC) $(CFLAGS) -c main_login.c
+
+# 编译登录系统
+login_system.o: login_system.c login_system.h
+	$(CC) $(CFLAGS) -c login_system.c
+
+# 清理
+clean:
+	del *.o $(TARGET).exe 2>nul || true
+
+# 运行程序
+run: $(TARGET)
+	./$(TARGET)
+
+.PHONY: all clean run 

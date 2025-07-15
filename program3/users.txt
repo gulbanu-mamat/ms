@@ -1,4 +1,5 @@
 admin;Admin123456;normal
 testuser;Initial123;initial 
 gulbanu;gul20041130;normal
-Alice;alice123456;normal
+123456;B8Y3F39569;initial
+123456789;e0SDgUF0R6;initial

@@ -29,8 +29,6 @@ int loadUsers(User users[], int *userCount) {
             strcpy(users[*userCount].username, username.c_str());
             strcpy(users[*userCount].password, password.c_str());
             strcpy(users[*userCount].status, status.c_str());
-            users[*userCount].failedAttempts = 0; // Initialize failed attempts
-            users[*userCount].freezeTime = 0; // Initialize freeze time
             (*userCount)++;
         }
     }
@@ -259,46 +257,8 @@ int showLoginScreen(User users[], int userCount) {
         password[pos] = '\0';
         curs_set(0);
         
-        // Find user first to check if frozen
-        int foundUserIndex = -1;
-        for (int i = 0; i < userCount; i++) {
-            if (strcmp(users[i].username, username) == 0) {
-                foundUserIndex = i;
-                break;
-            }
-        }
-        
-        // Check if user is frozen
-        if (foundUserIndex != -1 && isUserFrozen(&users[foundUserIndex])) {
-            time_t currentTime = time(NULL);
-            double remainingTime = 30.0 - difftime(currentTime, users[foundUserIndex].freezeTime);
-            
-            wclear(loginWin);
-            drawFrame(loginWin, "ACCOUNT FROZEN");
-            
-            wattron(loginWin, COLOR_PAIR(7) | A_BOLD);
-            mvwprintw(loginWin, 5, 5, "Account is frozen due to too many failed attempts!");
-            mvwprintw(loginWin, 6, 5, "Please wait %.0f more seconds...", remainingTime);
-            wattroff(loginWin, COLOR_PAIR(7) | A_BOLD);
-            
-            wattron(loginWin, COLOR_PAIR(4));
-            mvwprintw(loginWin, 8, 5, "Press any key to continue...");
-            wattroff(loginWin, COLOR_PAIR(4));
-            
-            wrefresh(loginWin);
-            wgetch(loginWin);
-            delwin(loginWin);
-            continue;
-        }
-        
         // Authenticate user
         if (authenticateUser(username, password, users, userCount, &userIndex)) {
-            // Reset failed attempts on successful login
-            if (foundUserIndex != -1) {
-                users[foundUserIndex].failedAttempts = 0;
-                users[foundUserIndex].freezeTime = 0;
-                saveUsers(users, userCount); // Save the reset
-            }
             currentUser = username;
             
             // Check if password change is required
@@ -329,64 +289,20 @@ int showLoginScreen(User users[], int userCount) {
             delwin(loginWin);
             return userIndex; // Successful login
         } else {
-            // Handle failed login attempt
-            if (foundUserIndex != -1) {
-                users[foundUserIndex].failedAttempts++;
-                
-                if (users[foundUserIndex].failedAttempts >= 3) {
-                    // Freeze account after 3 failed attempts
-                    freezeUser(&users[foundUserIndex]);
-                    saveUsers(users, userCount);
-                    
-                    wclear(loginWin);
-                    drawFrame(loginWin, "ACCOUNT FROZEN");
-                    
-                    wattron(loginWin, COLOR_PAIR(7) | A_BOLD);
-                    mvwprintw(loginWin, 5, 5, "Too many failed login attempts!");
-                    mvwprintw(loginWin, 6, 5, "Account has been frozen for 30 seconds.");
-                    wattroff(loginWin, COLOR_PAIR(7) | A_BOLD);
-                    
-                    wattron(loginWin, COLOR_PAIR(4));
-                    mvwprintw(loginWin, 8, 5, "Press any key to continue...");
-                    wattroff(loginWin, COLOR_PAIR(4));
-                    
-                    wrefresh(loginWin);
-                    wgetch(loginWin);
-                } else {
-                    // Display error message with remaining attempts
-                    saveUsers(users, userCount); // Save updated fail count
-                    
-                    wclear(loginWin);
-                    drawFrame(loginWin, "LOGIN ERROR");
-                    
-                    wattron(loginWin, COLOR_PAIR(7) | A_BOLD);
-                    mvwprintw(loginWin, 5, 5, "Invalid username or password!");
-                    mvwprintw(loginWin, 6, 5, "Attempts remaining: %d", 3 - users[foundUserIndex].failedAttempts);
-                    wattroff(loginWin, COLOR_PAIR(7) | A_BOLD);
-                    
-                    wattron(loginWin, COLOR_PAIR(4));
-                    mvwprintw(loginWin, 8, 5, "Press any key to try again...");
-                    wattroff(loginWin, COLOR_PAIR(4));
-                    
-                    wrefresh(loginWin);
-                    wgetch(loginWin);
-                }
-            } else {
-                // Username not found - show generic error
-                wclear(loginWin);
-                drawFrame(loginWin, "LOGIN ERROR");
-                
-                wattron(loginWin, COLOR_PAIR(7) | A_BOLD);
-                mvwprintw(loginWin, 6, 5, "Invalid username or password!");
-                wattroff(loginWin, COLOR_PAIR(7) | A_BOLD);
-                
-                wattron(loginWin, COLOR_PAIR(4));
-                mvwprintw(loginWin, 8, 5, "Press any key to try again...");
-                wattroff(loginWin, COLOR_PAIR(4));
-                
-                wrefresh(loginWin);
-                wgetch(loginWin);
-            }
+            // Display error message
+            wclear(loginWin);
+            drawFrame(loginWin, "LOGIN ERROR");
+            
+            wattron(loginWin, COLOR_PAIR(7) | A_BOLD);
+            mvwprintw(loginWin, 6, 5, "Invalid username or password!");
+            wattroff(loginWin, COLOR_PAIR(7) | A_BOLD);
+            
+            wattron(loginWin, COLOR_PAIR(4));
+            mvwprintw(loginWin, 8, 5, "Press any key to try again...");
+            wattroff(loginWin, COLOR_PAIR(4));
+            
+            wrefresh(loginWin);
+            wgetch(loginWin);
         }
         
         delwin(loginWin);
@@ -713,10 +629,9 @@ int showAdminMenuScreen(User users[], int *userCount) {
     const char* menuItems[] = {
         "1. Register New User",
         "2. Reset User Password",
-        "3. Delete User",
-        "4. View All Users",
-        "5. Change Admin Password",
-        "6. Logout"
+        "3. View All Users",
+        "4. Change Admin Password",
+        "5. Logout"
     };
     
     int highlight = 0;
@@ -735,7 +650,7 @@ int showAdminMenuScreen(User users[], int *userCount) {
         drawFrame(adminWin, "ADMIN PANEL");
         
         // Display menu items
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 5; i++) {
             if (i == highlight) {
                 wattron(adminWin, COLOR_PAIR(1));
                 mvwprintw(adminWin, 5 + i, 5, "> %s", menuItems[i]);
@@ -760,7 +675,7 @@ int showAdminMenuScreen(User users[], int *userCount) {
                 if (highlight > 0) highlight--;
                 break;
             case KEY_DOWN:
-                if (highlight < 5) highlight++;
+                if (highlight < 4) highlight++;
                 break;
             case '\n':
             case '\r':
@@ -780,10 +695,7 @@ int showAdminMenuScreen(User users[], int *userCount) {
         case 1: // Reset User Password
             resetUserPassword(users, *userCount);
             return 0;
-        case 2: // Delete User
-            deleteUser(users, userCount);
-            return 0;
-        case 3: { // View All Users with scrolling support
+        case 2: { // View All Users with scrolling support
             int startIndex = 0;
             int maxVisible = LINES - 8; // Leave space for header and footer
             int ch;
@@ -860,10 +772,10 @@ int showAdminMenuScreen(User users[], int *userCount) {
                 }
             }
         }
-        case 4: // Change Admin Password
+        case 3: // Change Admin Password
             showPasswordChangeScreen(users, *userCount, 0);
             return 0;
-        case 5: // Logout
+        case 4: // Logout
             return 1;
     }
     
@@ -943,158 +855,4 @@ int showUserMenuScreen(User users[], int userCount, int userIndex, const char *u
     }
     
     return 0;
-}
-
-// Check if user is currently frozen
-bool isUserFrozen(User *user) {
-    if (user->freezeTime == 0) return false;
-    
-    time_t currentTime = time(NULL);
-    double timeDiff = difftime(currentTime, user->freezeTime);
-    
-    // If 30 seconds have passed, unfreeze the user
-    if (timeDiff >= 30.0) {
-        user->freezeTime = 0;
-        user->failedAttempts = 0;
-        return false;
-    }
-    
-    return true;
-}
-
-// Freeze user account for 5 seconds
-void freezeUser(User *user) {
-    user->freezeTime = time(NULL);
-}
-
-// Delete user function
-void deleteUser(User users[], int *userCount) {
-    if (*userCount <= 1) {
-        clear();
-        attron(COLOR_PAIR(7) | A_BOLD);
-        mvprintw(LINES/2, COLS/2 - 20, "Cannot delete user - at least one user must remain!");
-        attroff(COLOR_PAIR(7) | A_BOLD);
-        
-        attron(COLOR_PAIR(4));
-        mvprintw(LINES/2 + 2, COLS/2 - 15, "Press any key to continue...");
-        attroff(COLOR_PAIR(4));
-        
-        refresh();
-        getch();
-        return;
-    }
-    
-    int highlight = 0;
-    
-    while (true) {
-        clear();
-        
-        // Header
-        attron(COLOR_PAIR(2) | A_BOLD);
-        mvprintw(1, 2, "DELETE USER - Select user to delete");
-        attroff(COLOR_PAIR(2) | A_BOLD);
-        
-        // Warning message
-        attron(COLOR_PAIR(7) | A_BOLD);
-        mvprintw(2, 2, "WARNING: This action cannot be undone!");
-        attroff(COLOR_PAIR(7) | A_BOLD);
-        
-        // Draw separator line
-        attron(COLOR_PAIR(6));
-        mvhline(3, 2, ACS_HLINE, COLS - 4);
-        attroff(COLOR_PAIR(6));
-        
-        // Display users (skip admin at index 0)
-        for (int i = 1; i < *userCount; i++) { // Start from 1 to skip admin
-            if (i - 1 == highlight) {
-                attron(COLOR_PAIR(1));
-                mvprintw(5 + (i - 1), 2, "> %2d. Username: %-20s Status: %-8s", 
-                        i, users[i].username, users[i].status);
-                attroff(COLOR_PAIR(1));
-            } else {
-                attron(COLOR_PAIR(3));
-                mvprintw(5 + (i - 1), 2, "  %2d. Username: %-20s Status: %-8s", 
-                        i, users[i].username, users[i].status);
-                attroff(COLOR_PAIR(3));
-            }
-        }
-        
-        // Footer with instructions
-        attron(COLOR_PAIR(4));
-        mvprintw(LINES - 3, 2, "Navigation: ↑/↓: Select user, ENTER: Confirm delete, ESC/Q: Cancel");
-        attroff(COLOR_PAIR(4));
-        
-        refresh();
-        
-        // Handle input
-        keypad(stdscr, TRUE);
-        int ch = getch();
-        
-        switch (ch) {
-            case KEY_UP:
-                if (highlight > 0) highlight--;
-                break;
-            case KEY_DOWN:
-                if (highlight < *userCount - 2) highlight++;
-                break;
-            case '\n':
-            case '\r':
-            case KEY_ENTER: {
-                // Confirm deletion
-                int selectedIndex = highlight + 1; // +1 because we skip admin
-                
-                clear();
-                attron(COLOR_PAIR(7) | A_BOLD);
-                mvprintw(LINES/2 - 2, COLS/2 - 20, "Are you sure you want to delete user:");
-                mvprintw(LINES/2 - 1, COLS/2 - 10, "%s", users[selectedIndex].username);
-                attroff(COLOR_PAIR(7) | A_BOLD);
-                
-                attron(COLOR_PAIR(4));
-                mvprintw(LINES/2 + 1, COLS/2 - 15, "Press Y to confirm, N to cancel");
-                attroff(COLOR_PAIR(4));
-                
-                refresh();
-                
-                int confirmCh = getch();
-                if (confirmCh == 'Y' || confirmCh == 'y') {
-                    // Delete user directory
-                    char rmCmd[200];
-#ifdef _WIN32
-                    sprintf(rmCmd, "rmdir /s /q \"users\\%s\" 2>nul", users[selectedIndex].username);
-#else
-                    sprintf(rmCmd, "rm -rf \"users/%s\" 2>/dev/null", users[selectedIndex].username);
-#endif
-                    system(rmCmd);
-                    
-                    // Remove user from array
-                    for (int i = selectedIndex; i < *userCount - 1; i++) {
-                        users[i] = users[i + 1];
-                    }
-                    (*userCount)--;
-                    
-                    // Save updated user list
-                    saveUsers(users, *userCount);
-                    
-                    // Success message
-                    clear();
-                    attron(COLOR_PAIR(6) | A_BOLD);
-                    mvprintw(LINES/2, COLS/2 - 10, "User deleted successfully!");
-                    attroff(COLOR_PAIR(6) | A_BOLD);
-                    
-                    attron(COLOR_PAIR(4));
-                    mvprintw(LINES/2 + 2, COLS/2 - 15, "Press any key to continue...");
-                    attroff(COLOR_PAIR(4));
-                    
-                    refresh();
-                    getch();
-                    return;
-                }
-                break;
-            }
-            case 'q':
-            case 'Q':
-            case 27: // ESC key
-                return;
-        }
-    }
 } 
